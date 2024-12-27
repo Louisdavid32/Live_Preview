@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendule Animé</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #4b6cb7, #182848);
+      font-family: Arial, sans-serif;
+    }
+
+    .clock {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #ffffff, #d9d9d9);
+      border-radius: 50%;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .pendulum {
+      position: absolute;
+      width: 8px;
+      height: 120px;
+      background: linear-gradient(180deg, #ff7eb3, #ff758c);
+      transform-origin: top center;
+      transform: rotate(0deg);
+      border-radius: 5px;
+    }
+
+    .bob {
+      position: absolute;
+      bottom: -20px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      border-radius: 50%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .stand {
+      position: absolute;
+      top: 10px;
+      width: 10px;
+      height: 40px;
+      background: #222;
+      border-radius: 5px;
+      z-index: 1;
+    }
+
+    .numbers {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    .numbers span {
+      position: absolute;
+    }
+
+    .numbers .one { transform: rotate(30deg) translate(110px) rotate(-30deg); }
+    .numbers .two { transform: rotate(60deg) translate(110px) rotate(-60deg); }
+    .numbers .three { transform: rotate(90deg) translate(110px) rotate(-90deg); }
+    .numbers .four { transform: rotate(120deg) translate(110px) rotate(-120deg); }
+    .numbers .five { transform: rotate(150deg) translate(110px) rotate(-150deg); }
+    .numbers .six { transform: rotate(180deg) translate(110px) rotate(-180deg); }
+    .numbers .seven { transform: rotate(210deg) translate(110px) rotate(-210deg); }
+    .numbers .eight { transform: rotate(240deg) translate(110px) rotate(-240deg); }
+    .numbers .nine { transform: rotate(270deg) translate(110px) rotate(-270deg); }
+    .numbers .ten { transform: rotate(300deg) translate(110px) rotate(-300deg); }
+    .numbers .eleven { transform: rotate(330deg) translate(110px) rotate(-330deg); }
+    .numbers .twelve { transform: rotate(0deg) translate(110px) rotate(0deg); }
+
+  </style>
+</head>
+<body>
+  <div class="clock">
+    <div class="stand"></div>
+    <div class="pendulum" id="pendulum">
+      <div class="bob"></div>
+    </div>
+    <div class="numbers">
+      <span class="one">1</span>
+      <span class="two">2</span>
+      <span class="three">3</span>
+      <span class="four">4</span>
+      <span class="five">5</span>
+      <span class="six">6</span>
+      <span class="seven">7</span>
+      <span class="eight">8</span>
+      <span class="nine">9</span>
+      <span class="ten">10</span>
+      <span class="eleven">11</span>
+      <span class="twelve">12</span>
+    </div>
+  </div>
+
+  <script>
+    const pendulum = document.getElementById('pendulum');
+    let angle = 0;
+    let direction = 1;
+    const maxAngle = 30; //  angle de rotation max
+    const speed = 2; // vitesse du pedule 
+    function animatePendulum() {
+      angle += direction * speed;
+      if (angle >= maxAngle || angle <= -maxAngle) {
+        direction *= -1;
+      }
+      pendulum.style.transform = `rotate(${angle}deg)`;
+      requestAnimationFrame(animatePendulum);
+    }
+
+    animatePendulum();
+  </script>
+</body>
+</html>

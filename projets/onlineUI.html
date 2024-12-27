@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Team Clock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .clock {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 5px solid #ffffff;
+            border-radius: 50%;
+            background-color: #333;
+        }
+
+        .clock .hand {
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background-color: #ffffff;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0% 50%;
+            transform: rotate(90deg);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .clock .hour {
+            height: 4px;
+        }
+
+        .team-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .team-section h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .team-section h2 .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: green;
+            border-radius: 50%;
+        }
+
+        .team-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .team-list li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            background-color: #444;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            margin: .5rem;
+        }
+
+        .team-list li:hover {
+            background-color: #555;
+        }
+
+        .team-list img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .team-list .time {
+            margin-left: auto;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="clock">
+            <div class="hand hour" id="hour-hand"></div>
+            <div class="hand minute" id="minute-hand"></div>
+        </div>
+
+        <div class="team-section">
+            <h2>Team <span class="status-dot"></span> Online</h2>
+            <ul class="team-list">
+                <li data-time="12:05">
+                    <img src="friends.png" alt="Avatar">
+                    <div>
+                        <h4>Louis Dave</h4>
+                        <p>Abidjan, Côte d'Ivoire</p>
+                    </div>
+                    <span class="time">12:05</span>
+                </li>
+                <li data-time="14:30">
+                    <img src="friends.png" alt="Avatar">
+                    <div>
+                        <h4>Louis David</h4>
+                        <p>Paris, France</p>
+                    </div>
+                    <span class="time">14:30</span>
+                </li>
+                <li data-time="16:45">
+                    <img src="friends.png" alt="Avatar">
+                    <div>
+                        <h4>John Franck</h4>
+                        <p>New York, USA</p>
+                    </div>
+                    <span class="time">16:45</span>
+                </li>
+                <li data-time="09:15">
+                    <img src="friends.png" alt="Avatar">
+                    <div>
+                        <h4>Youncoder dev</h4>
+                        <p>Lagos, Nigeria</p>
+                    </div>
+                    <span class="time">09:15</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const hourHand = document.getElementById('hour-hand');
+        const minuteHand = document.getElementById('minute-hand');
+        const teamMembers = document.querySelectorAll('.team-list li');
+
+        teamMembers.forEach(member => {
+            member.addEventListener('mouseover', () => {
+                const time = member.dataset.time.split(':');
+                const hours = parseInt(time[0]);
+                const minutes = parseInt(time[1]);
+
+                const hourAngle = (360 / 12) * hours + (30 / 60) * minutes;
+                const minuteAngle = (360 / 60) * minutes;
+
+                hourHand.style.transform = `rotate(${hourAngle}deg)`;
+                minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+            });
+        });
+    </script>
+</body>
+</html>
+

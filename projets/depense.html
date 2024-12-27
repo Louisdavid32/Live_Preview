@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      color: #000;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f9f9f9;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    input, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      left: 2rem;
+    }
+
+    input {
+      background: #e9ecef;
+      color: #000; 
+      width: 88%;
+      
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 5px #007bff;
+    }
+
+    button {
+      background: linear-gradient(to right, #007bff, #6610f2);
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .expense-list {
+      margin-top: 20px;
+    }
+
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: #e9ecef;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .expense-item span {
+      color: #007bff;
+    }
+
+    .actions button {
+      margin-left: 10px;
+      width: auto;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+
+    .chart {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
+
+    <!-- Login Form -->
+    <div id="login-form">
+      <input type="text" id="username" placeholder="Enter your username">
+      <input type="password" id="password" placeholder="Enter your password">
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Expense Tracker Form -->
+    <div id="expense-tracker" style="display: none;">
+      <input type="text" id="expense-name" placeholder="Expense Name">
+      <input type="number" id="expense-amount" placeholder="Amount">
+      <button onclick="addExpense()">Add Expense</button>
+
+      <div class="expense-list" id="expense-list"></div>
+
+      <div class="chart">
+        <canvas id="expenseChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const users = {};
+    const expenses = [];
+    let chart;
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert('Please enter both username and password.');
+        return;
+      }
+
+      if (!users[username]) {
+        users[username] = password;
+        alert('User registered successfully!');
+      } else if (users[username] !== password) {
+        alert('Invalid credentials!');
+        return;
+      }
+
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('expense-tracker').style.display = 'block';
+    }
+
+    function addExpense() {
+      const name = document.getElementById('expense-name').value;
+      const amount = parseFloat(document.getElementById('expense-amount').value);
+
+      if (!name || isNaN(amount)) {
+        alert('Please enter valid expense details.');
+        return;
+      }
+
+      const expense = { name, amount };
+      expenses.push(expense);
+      renderExpenses();
+      updateChart();
+
+      document.getElementById('expense-name').value = '';
+      document.getElementById('expense-amount').value = '';
+    }
+
+    function renderExpenses() {
+      const expenseList = document.getElementById('expense-list');
+      expenseList.innerHTML = '';
+
+      expenses.forEach((expense, index) => {
+        const div = document.createElement('div');
+        div.classList.add('expense-item');
+
+        div.innerHTML = `
+          <div>
+            <span>${expense.name}</span> - $${expense.amount.toFixed(2)}
+          </div>
+          <div class="actions">
+            <button onclick="editExpense(${index})">Edit</button>
+            <button onclick="deleteExpense(${index})">Delete</button>
+          </div>
+        `;
+
+        expenseList.appendChild(div);
+      });
+    }
+
+    function deleteExpense(index) {
+      expenses.splice(index, 1);
+      renderExpenses();
+      updateChart();
+    }
+
+    function editExpense(index) {
+      const expense = expenses[index];
+      document.getElementById('expense-name').value = expense.name;
+      document.getElementById('expense-amount').value = expense.amount;
+      deleteExpense(index);
+    }
+
+    function updateChart() {
+      const ctx = document.getElementById('expenseChart').getContext('2d');
+      const labels = expenses.map((expense, index) => `Expense ${index + 1}`);
+      const data = expenses.reduce((acc, expense, index) => {
+        acc.push((acc[index - 1] || 0) + expense.amount);
+        return acc;
+      }, []);
+
+      if (chart) {
+        chart.destroy();
+      }
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Cumulative Expenses',
+            data: data,
+            backgroundColor: 'rgba(0, 123, 255, 0.2)',
+            borderColor: 'rgba(0, 123, 255, 1)',
+            borderWidth: 2,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true
+            },
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      color: #000;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f9f9f9;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    input {
+      background: #e9ecef;
+      color: #000;
+    }
+
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 5px #007bff;
+    }
+
+    button {
+      background: linear-gradient(to right, #007bff, #6610f2);
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .expense-list {
+      margin-top: 20px;
+    }
+
+    .expense-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      background: #e9ecef;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .expense-item span {
+      color: #007bff;
+    }
+
+    .actions button {
+      margin-left: 10px;
+      width: auto;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+
+    .chart {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Expense Tracker</h1>
+
+     Login Form
+    <div id="login-form">
+      <input type="text" id="username" placeholder="Enter your username">
+      <input type="password" id="password" placeholder="Enter your password">
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Expense Tracker Form 
+    <div id="expense-tracker" style="display: none;">
+      <input type="text" id="expense-name" placeholder="Expense Name">
+      <input type="number" id="expense-amount" placeholder="Amount">
+      <button onclick="addExpense()">Add Expense</button>
+
+      <div class="expense-list" id="expense-list"></div>
+
+      <div class="chart">
+        <canvas id="expenseChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const users = {};
+    const expenses = [];
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        alert('Please enter both username and password.');
+        return;
+      }
+
+      if (!users[username]) {
+        users[username] = password;
+        alert('User registered successfully!');
+      } else if (users[username] !== password) {
+        alert('Invalid credentials!');
+        return;
+      }
+
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('expense-tracker').style.display = 'block';
+    }
+
+    function addExpense() {
+      const name = document.getElementById('expense-name').value;
+      const amount = parseFloat(document.getElementById('expense-amount').value);
+
+      if (!name || isNaN(amount)) {
+        alert('Please enter valid expense details.');
+        return;
+      }
+
+      const expense = { name, amount };
+      expenses.push(expense);
+      renderExpenses();
+      updateChart();
+
+      document.getElementById('expense-name').value = '';
+      document.getElementById('expense-amount').value = '';
+    }
+
+    function renderExpenses() {
+      const expenseList = document.getElementById('expense-list');
+      expenseList.innerHTML = '';
+
+      expenses.forEach((expense, index) => {
+        const div = document.createElement('div');
+        div.classList.add('expense-item');
+
+        div.innerHTML = `
+          <div>
+            <span>${expense.name}</span> - $${expense.amount.toFixed(2)}
+          </div>
+          <div class="actions">
+            <button onclick="editExpense(${index})">Edit</button>
+            <button onclick="deleteExpense(${index})">Delete</button>
+          </div>
+        `;
+
+        expenseList.appendChild(div);
+      });
+    }
+
+    function deleteExpense(index) {
+      expenses.splice(index, 1);
+      renderExpenses();
+      updateChart();
+    }
+
+    function editExpense(index) {
+      const expense = expenses[index];
+      document.getElementById('expense-name').value = expense.name;
+      document.getElementById('expense-amount').value = expense.amount;
+      deleteExpense(index);
+    }
+
+    function updateChart() {
+      const ctx = document.getElementById('expenseChart').getContext('2d');
+      const labels = expenses.map(expense => expense.name);
+      const data = expenses.map(expense => expense.amount);
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Expenses',
+            data: data,
+            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+            borderColor: 'rgba(0, 123, 255, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              beginAtZero: true
+            },
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>-->

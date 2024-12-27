@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animation des Images</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
+      font-family: Arial, sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      position: relative;
+      bottom: 3rem;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 40px;
+    }
+
+    .button {
+      position: relative;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: white;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .button:hover {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+
+    .images {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      width: 70%;
+      position: relative;
+    }
+
+    .image {
+      position: relative;
+      width: 500px;
+      height: 300px;
+      overflow: hidden;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .image:hover img {
+        transform: scale(1.5) rotate(-7deg);
+        transition: transform 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="buttons">
+      <button class="button" id="resetButton">Reset</button>
+      <button class="button" id="middleButton">Click Me</button>
+      <button class="button" id="resetButton2">Reset</button>
+    </div>
+    <div class="images">
+      <div class="image" id="image1">
+        <img src="https://img.freepik.com/photos-gratuite/belle-fille-africaine-ecouter-musique-dans-ecouteurs-mur-blanc_176420-493.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid" alt="Image 1">
+      </div>
+      <div class="image" id="image2">
+        <img src="https://img.freepik.com/photos-gratuite/femme-jouant-guitare-lors-evenement-local_23-2149188094.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid" alt="Image 2">
+      </div>
+      <div class="image" id="image3">
+        <img src="https://img.freepik.com/photos-premium/portrait-femme-noire-profil-ecoutant-musique-generative-ai_190575-185.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid" alt="Image 3">
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    const middleButton = document.getElementById('middleButton');
+    const resetButton = document.getElementById('resetButton');
+    const resetButton2 = document.getElementById('resetButton2');
+    const image1 = document.getElementById('image1');
+    const image2 = document.getElementById('image2');
+    const image3 = document.getElementById('image3');
+
+    // Animation pour superposer les images
+    middleButton.addEventListener('click', () => {
+      gsap.to(image1, {
+        x: '50%',
+        y: '-25%',
+        rotate: -10,
+        scale: 0.8,
+        duration: 0.5,
+        zIndex: 2,
+      });
+
+      gsap.to(image2, {
+        x: '0%',
+        y: '-25%',
+        scale: 0.8,
+        duration: 0.5,
+        zIndex: 3,
+      });
+
+      gsap.to(image3, {
+        x: '-50%',
+        y: '-25%',
+        rotate: 10,
+        scale: 0.8,
+        duration: 0.5,
+        zIndex: 1,
+      });
+    });
+
+    // Réinitialisation des images
+    const resetImages = () => {
+      gsap.to([image1, image2, image3], {
+        x: '0%',
+        y: '0%',
+        rotate: 0,
+        scale: 1,
+        duration: 0.5,
+        zIndex: 0,
+      });
+    };
+
+    resetButton.addEventListener('click', resetImages);
+    resetButton2.addEventListener('click', resetImages);
+
+    // Animation GSAP au survol des boutons
+    const buttons = document.querySelectorAll('.button');
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        gsap.to(button, {scale: 1.2, duration: 0.3});
+      });
+      button.addEventListener('mouseleave', () => {
+        gsap.to(button, {scale: 1, duration: 0.3});
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animation des Images</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      position: relative;
+      bottom: 3rem; /* Ajusté pour éviter le chevauchement */
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .button {
+      position: relative;
+      padding: 15px 25px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: white;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+
+    .images {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      width: 60%;
+      position: relative;
+    }
+
+    .image {
+      position: relative;
+      width: 600px;
+      height: 350px;
+      overflow: hidden;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .image:hover img {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="buttons">
+      <button class="button" id="resetButton">Reset</button>
+      <button class="button" id="middleButton">Click Me</button>
+      <button class="button" id="resetButton2">Reset</button>
+    </div>
+    <div class="images">
+      <div class="image" id="image1">
+        <img src="../im1.jpeg" alt="Image 1">
+      </div>
+      <div class="image" id="image2">
+        <img src="../im3.jpeg" alt="Image 2">
+      </div>
+      <div class="image" id="image3">
+        <img src="../im4.jpeg" alt="Image 3">
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    const middleButton = document.getElementById('middleButton');
+    const resetButton = document.getElementById('resetButton');
+    const resetButton2 = document.getElementById('resetButton2');
+    const image1 = document.getElementById('image1');
+    const image2 = document.getElementById('image2');
+    const image3 = document.getElementById('image3');
+
+    // Animation pour superposer les images
+    middleButton.addEventListener('click', () => {
+      gsap.to(image1, {
+        x: '40%', // Ajuste les positions pour éviter le chevauchement des boutons
+        y: '-20%',
+        rotate: -10,
+        scale: 0.7,
+        duration: 0.5,
+        zIndex: 2,
+      });
+
+      gsap.to(image2, {
+        x: '0%',
+        y: '-20%',
+        scale: 0.7,
+        duration: 0.5,
+        zIndex: 3,
+      });
+
+      gsap.to(image3, {
+        x: '-40%',
+        y: '-20%',
+        rotate: 10,
+        scale: 0.7,
+        duration: 0.5,
+        zIndex: 1,
+      });
+    });
+
+    // Réinitialisation des images
+    const resetImages = () => {
+      gsap.to([image1, image2, image3], {
+        x: '0%',
+        y: '0%',
+        rotate: 0,
+        scale: 1,
+        duration: 0.5,
+        zIndex: 0,
+      });
+    };
+
+    resetButton.addEventListener('click', resetImages);
+    resetButton2.addEventListener('click', resetImages);
+  </script>
+</body>
+</html>-->

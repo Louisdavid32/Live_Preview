@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effet de pétales</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #1a1a1a;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    .petal {
+      position: absolute;
+      width:2.5px;
+      height:1px;
+      background-color: #FF69B4;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .message {
+      position: absolute;
+      font-size: 48px;
+      color: white;
+      opacity: 0;
+      text-align: center;
+      white-space: nowrap;
+      animation: drawText 4s ease-in-out infinite;
+    }
+
+    @keyframes drawText {
+      0% {
+        opacity: 0;
+        clip-path: inset(0 100% 0 0);
+      }
+      50% {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .card-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeInOut 4s infinite;
+    }
+
+    .card {
+  width: 200px; /* Taille légèrement augmentée */
+  height: 260px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, z-index 0.3s ease;
+  z-index: 1;
+}
+
+
+    /*.card:hover {
+      transform: rotateY(15deg) rotateX(10deg) scale(1.05);
+    }*/
+
+    .card:hover {
+            transform: scale(2.5); /* Agrandissement 2.5x */
+            z-index: 10; /* Superposition sur les autres cartes */
+    }   
+
+    @keyframes fadeInOut {
+      0%, 100% {
+        opacity: 0;
+      }
+      25%, 75% {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="message" id="message1">Joyeux Noël</div>
+<div class="message" id="message2">Bonne Année 2025</div>
+<div class="card-container" id="cardContainer"></div>
+
+<script>
+  const images = [
+    'https://img.freepik.com/psd-gratuit/bonne-annee-2025-modele-conception-banniere-3d-doree_47987-25651.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid',
+    'https://img.freepik.com/photos-premium/celebration-du-nouvel-an-an-chinois-serpent-vert-texte-2025-elements-conception-creatifs-banniere-ideale-pour-attirer-attention-publicite-espace-copie-ample_771426-93442.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid',
+    'https://img.freepik.com/psd-premium/affiche-pour-nouvelle-annee-etoile-nuage-arriere-plan_429578-8357.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid',
+    'https://img.freepik.com/psd-gratuit/bonne-annee-2025-ballon-feuille-modele-rendu-3d_47987-26016.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid',
+    'https://img.freepik.com/psd-gratuit/modele-conception-banniere-web-pour-celebration-du-nouvel-an-2025_106176-4775.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid',
+    'https://img.freepik.com/psd-gratuit/bonne-annee-2025-modele-conception-banniere-celebration_47987-25450.jpg?uid=R99331584&ga=GA1.1.654169743.1732304666&semt=ais_hybrid',
+];
+
+  let currentIndex = 0;
+
+  function createPetals() {
+    for (let i = 0; i < 5; i++) {
+      const centerX = Math.random() * window.innerWidth;
+      const centerY = Math.random() * window.innerHeight;
+
+      for (let j = 0; j < 50; j++) {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+
+        const size = Math.random() * 2 + 2.5;
+        petal.style.width = `${size}px`;
+        petal.style.height = `${size}px`;
+
+        const colors = ['#FF69B4', '#FFD700', '#ADFF2F', '#00BFFF', '#FF4500', '#8A2BE2'];
+        petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        document.body.appendChild(petal);
+
+        petal.style.left = `${centerX}px`;
+        petal.style.top = `${centerY}px`;
+
+        setTimeout(() => {
+          const angle = Math.random() * 2 * Math.PI;
+          const distance = Math.random() * 300 + 50;
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
+
+          petal.style.transition = `transform 2s ease-out, opacity 2s ease-out`;
+          petal.style.transform = `translate(${x}px, ${y}px)`;
+          petal.style.opacity = 1;
+        }, 50);
+
+        setTimeout(() => {
+          petal.style.opacity = 0;
+          petal.style.transform += ` scale(0)`;
+        }, 2000);
+
+        setTimeout(() => {
+          petal.remove();
+        }, 3000);
+      }
+    }
+  }
+
+  function updateMessagePosition(message) {
+    const x = Math.random() * (window.innerWidth - 300);
+    const y = Math.random() * (window.innerHeight - 100);
+    message.style.left = `${x}px`;
+    message.style.top = `${y}px`;
+  }
+
+  function updateCards() {
+    const cardContainer = document.getElementById('cardContainer');
+    cardContainer.innerHTML = '';
+
+    const card1 = document.createElement('div');
+    card1.classList.add('card');
+    card1.style.backgroundImage = `url(${images[currentIndex]})`;
+
+    const card2 = document.createElement('div');
+    card2.classList.add('card');
+    card2.style.backgroundImage = `url(${images[(currentIndex + 1) % images.length]})`;
+
+    cardContainer.appendChild(card1);
+    cardContainer.appendChild(card2);
+
+    currentIndex = (currentIndex + 2) % images.length;
+  }
+
+  function startAnimation() {
+    const message1 = document.getElementById('message1');
+    const message2 = document.getElementById('message2');
+
+    setInterval(() => {
+      createPetals();
+    }, 800);
+
+    setInterval(() => {
+      updateMessagePosition(message1);
+    }, 4000);
+
+    setInterval(() => {
+      updateMessagePosition(message2);
+    }, 6000);
+
+    setInterval(() => {
+      updateCards();
+    }, 4000);
+  }
+
+  // Lancer l'animation au chargement
+  startAnimation();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effet de pétales</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #1a1a1a;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    .petal {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background-color: #FF69B4;
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .message {
+      position: absolute;
+      font-size: 48px;
+      color: white;
+      opacity: 0;
+      text-align: center;
+      white-space: nowrap;
+      animation: drawText 4s ease-in-out infinite;
+    }
+
+    @keyframes drawText {
+      0% {
+        opacity: 0;
+        clip-path: inset(0 100% 0 0);
+      }
+      50% {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .card-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 20px;
+      opacity: 0;
+      animation: fadeInOut 4s infinite;
+    }
+
+    .card {
+      width: 150px;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% {
+        opacity: 0;
+      }
+      25%, 75% {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="message" id="message1">Joyeux Noël</div>
+<div class="message" id="message2">Bonne Année 2025</div>
+<div class="card-container" id="cardContainer"></div>
+
+<script>
+  const images = [
+    'https://via.placeholder.com/150/FF69B4',
+    'https://via.placeholder.com/150/FFD700',
+    'https://via.placeholder.com/150/ADFF2F',
+    'https://via.placeholder.com/150/00BFFF',
+    'https://via.placeholder.com/150/FF4500',
+    'https://via.placeholder.com/150/8A2BE2'
+  ];
+
+  let currentIndex = 0;
+
+  function createPetals() {
+    for (let i = 0; i < 5; i++) {
+      const centerX = Math.random() * window.innerWidth;
+      const centerY = Math.random() * window.innerHeight;
+
+      for (let j = 0; j < 50; j++) {
+        const petal = document.createElement('div');
+        petal.classList.add('petal');
+
+        const size = Math.random() * 2 + 3;
+        petal.style.width = `${size}px`;
+        petal.style.height = `${size}px`;
+
+        const colors = ['#FF69B4', '#FFD700', '#ADFF2F', '#00BFFF', '#FF4500', '#8A2BE2'];
+        petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+        document.body.appendChild(petal);
+
+        petal.style.left = `${centerX}px`;
+        petal.style.top = `${centerY}px`;
+
+        setTimeout(() => {
+          const angle = Math.random() * 2 * Math.PI;
+          const distance = Math.random() * 300 + 50;
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
+
+          petal.style.transition = `transform 2s ease-out, opacity 2s ease-out`;
+          petal.style.transform = `translate(${x}px, ${y}px)`;
+          petal.style.opacity = 1;
+        }, 100);
+
+        setTimeout(() => {
+          petal.style.opacity = 0;
+          petal.style.transform += ` scale(0)`;
+        }, 2000);
+
+        setTimeout(() => {
+          petal.remove();
+        }, 3000);
+      }
+    }
+  }
+
+  function updateMessagePosition(message) {
+    const x = Math.random() * (window.innerWidth - 300);
+    const y = Math.random() * (window.innerHeight - 100);
+    message.style.left = `${x}px`;
+    message.style.top = `${y}px`;
+  }
+
+  function updateCards() {
+    const cardContainer = document.getElementById('cardContainer');
+    cardContainer.innerHTML = '';
+
+    const card1 = document.createElement('div');
+    card1.classList.add('card');
+    card1.style.backgroundImage = `url(${images[currentIndex]})`;
+
+    const card2 = document.createElement('div');
+    card2.classList.add('card');
+    card2.style.backgroundImage = `url(${images[(currentIndex + 1) % images.length]})`;
+
+    cardContainer.appendChild(card1);
+    cardContainer.appendChild(card2);
+
+    currentIndex = (currentIndex + 2) % images.length;
+  }
+
+  function startAnimation() {
+    const message1 = document.getElementById('message1');
+    const message2 = document.getElementById('message2');
+
+    setInterval(() => {
+      createPetals();
+    }, 2000);
+
+    setInterval(() => {
+      updateMessagePosition(message1);
+    }, 4000);
+
+    setInterval(() => {
+      updateMessagePosition(message2);
+    }, 6000);
+
+    setInterval(() => {
+      updateCards();
+    }, 4000);
+  }
+
+  // Lancer l'animation au chargement
+  startAnimation();
+</script>
+
+</body>
+</html>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effet de pétales</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(120deg, #FFDEE9, #B5FFFC);
+      overflow: hidden;
+    }
+
+    .button {
+      padding: 15px 30px;
+      background-color: #FF69B4;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+    }
+
+    .petal {
+      position: absolute;
+      width: 1px;
+      height: 5.5px;
+      background-color: #FF69B4;
+      /*border-radius: 50%;*/
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<button class="button" id="petalButton">Faites jaillir des pétales</button>
+
+<script>
+  const button = document.getElementById('petalButton');
+
+  button.addEventListener('click', () => {
+    for (let i = 0; i < 400; i++) {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+
+      const size = Math.random() * 1.5 + 5 ;
+      petal.style.width = `${size}px`;
+      petal.style.height = `${size}px`;
+
+      const colors = ['#FF69B4', '#FFD700', '#ADFF2F', '#00BFFF', '#D9D9D9', '#FF4500'];
+      petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+      document.body.appendChild(petal);
+
+      const x = button.offsetLeft + button.offsetWidth / 2;
+      const y = button.offsetTop + button.offsetHeight / 2;
+      petal.style.left = `${x}px`;
+      petal.style.top = `${y}px`;
+
+      const angle = Math.random() * 360;
+      const distance = Math.random() * 200 + 50;
+      const transformX = Math.cos(angle) * distance;
+      const transformY = Math.sin(angle) * distance;
+
+      petal.style.transition = `transform 1s ease-out, opacity 1s ease-out`;
+      petal.style.transform = `translate(${transformX}px, ${transformY}px)`;
+      petal.style.opacity = 1;
+
+      setTimeout(() => {
+        petal.style.opacity = 0;
+        petal.style.transform += ` scale(0)`;
+      }, 800);
+
+      setTimeout(() => {
+        petal.remove();
+      }, 2000);
+    }
+  });
+</script>
+
+</body>
+</html>-->

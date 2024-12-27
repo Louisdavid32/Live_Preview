@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutons Galaxy et Gradient</title>
+    <style>
+        /* Style global pour le fond de la page */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000; /* Fond noir */
+            font-family: Arial, sans-serif;
+            gap: 20px; /* Espacement entre les boutons */
+        }
+
+        /* Bouton Galaxy */
+        .galaxy-button {
+            position: relative;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            background: linear-gradient(135deg, #3a007d, #1e0030, #8700ff);
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 20px rgba(135, 0, 255, 0.8), 0 0 10px rgba(58, 0, 125, 0.6);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Particules ou brillance en arrière-plan pour le bouton Galaxy */
+        .galaxy-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, transparent 40%);
+            animation: galaxy-spin 4s infinite linear;
+        }
+
+        /* Effet brillant au hover pour le bouton Galaxy */
+        .galaxy-button:hover {
+            background: linear-gradient(135deg, #7f00ff, #e100ff);
+            box-shadow: 0 0 30px rgba(239, 87, 255, 0.9), 0 0 15px rgba(135, 0, 255, 0.7);
+        }
+
+        /* Animation de rotation subtile pour le bouton Galaxy */
+        @keyframes galaxy-spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Bouton Gradient */
+        .gradient-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-transform: capitalize;
+            background: linear-gradient(90deg, #000, #2b2d42 50%, #000); /* Dégradé central */
+            border-radius: 50px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Particules et effet de texture pour le bouton Gradient */
+        .gradient-button::before {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background-size: 5px 5px;
+            top: 0;
+            left: 0;
+            opacity: 0.2;
+            transform: scale(1.2);
+            pointer-events: none;
+        }
+
+        /* Effet de gradient animé au hover pour le bouton Gradient */
+        .gradient-button:hover {
+            background: linear-gradient(90deg, #2b2d42, #0077ff, #2b2d42);
+            box-shadow: 0 8px 25px rgba(0, 119, 255, 0.6);
+        }
+
+        /* Texte du bouton Gradient */
+        .gradient-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animation d'ondulation au hover pour le bouton Gradient */
+        .gradient-button:hover::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: 50%;
+            left: 50%;
+            background: radial-gradient(circle, rgba(0, 119, 255, 0.5) 20%, transparent 60%);
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0.6;
+            pointer-events: none;
+            border-radius: 50%;
+            animation: ripple 0.8s ease-out;
+        }
+
+        /* Animation Ripple pour le bouton Gradient */
+        @keyframes ripple {
+            to {
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="galaxy-button">Galaxy button!</button>
+    <button class="gradient-button"><span>Get unlimited access</span></button>
+</body>
+</html>
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animation au Survol</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #1e1e1e, #3a3a3a);
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 80%;
+      position: relative; /* Position relative pour que les éléments en position absolue soient bien positionnés */
+    }
+
+    .button {
+      position: relative;
+      padding: 20px 30px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: white;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+
+    .button span {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-100%) rotate(45deg);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .button:hover span {
+      transform: translateX(100%) rotate(45deg);
+    }
+
+    .image {
+      position: absolute; /* Nécessaire pour déplacer les images */
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .image img {
+      width: 100%;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .image:hover img {
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+    .image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .image:hover::before {
+      opacity: 1;
+    }
+
+    /* Classe qui sera ajoutée lors du clic */
+    .clicked .image:nth-child(1) {
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%) rotate(-10deg);
+    }
+
+    .clicked .image:nth-child(2) {
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) rotate(0deg);
+    }
+
+    .clicked .image:nth-child(3) {
+      top: 70%;
+      left: 50%;
+      transform: translateX(-50%) rotate(10deg);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="button">
+      Hover Me
+      <span></span>
+    </button>
+    <button class="button" id="middleButton">
+      Click Me
+      <span></span>
+    </button>
+    <button class="button">
+      Animate
+      <span></span>
+    </button>
+
+    <div class="image">
+      <img src="https://via.placeholder.com/300x200" alt="Image 1">
+    </div>
+    <div class="image">
+      <img src="https://via.placeholder.com/300x200" alt="Image 2">
+    </div>
+    <div class="image">
+      <img src="https://via.placeholder.com/300x200" alt="Image 3">
+    </div>
+  </div>
+
+  <!-- Chargement de GSAP 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    // Vérifier si GSAP est chargé
+    if (gsap) {
+      console.log("GSAP est chargé avec succès.");
+    } else {
+      console.log("GSAP n'a pas été chargé.");
+    }
+
+    // GSAP Animation on Hover for Buttons
+    const buttons = document.querySelectorAll('.button');
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        gsap.to(button, {scale: 1.15, duration: 0.3});
+      });
+      button.addEventListener('mouseleave', () => {
+        gsap.to(button, {scale: 1, duration: 0.3});
+      });
+    });
+
+    // GSAP Animation on Hover for Images
+    const images = document.querySelectorAll('.image');
+    images.forEach(image => {
+      image.addEventListener('mouseenter', () => {
+        gsap.to(image.querySelector('img'), {scale: 1.2, rotate: -10, duration: 0.3});
+      });
+      image.addEventListener('mouseleave', () => {
+        gsap.to(image.querySelector('img'), {scale: 1, rotate: 0, duration: 0.3});
+      });
+    });
+
+    // Animation au clic pour le bouton du milieu
+    const middleButton = document.getElementById('middleButton');
+    const container = document.querySelector('.container');
+
+    middleButton.addEventListener('click', () => {
+      container.classList.toggle('clicked'); // Ajouter/retirer la classe 'clicked'
+    });
+  </script>
+</body>
+</html>-->
+
